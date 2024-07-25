@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id String @id @default(uuid())
+  title String @unique
+  slug String
+
+  Post Post[]
+
+  @@map("categories")
+}
+
+model Post {
+  id String @id @default(uuid())
+  title String @unique
+  slug String 
+  categories Category[]
+  content String @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posts")
+}
+
+model MainPost {
+  id String @id @default("")
+
+  @@map("main_post")
+}
+
+model MenuOption {
+  id String @id @default(uuid())
+  title String @unique
+  slug String
+
+  @@map("menu_options")
+}
