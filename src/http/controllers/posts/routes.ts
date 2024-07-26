@@ -5,6 +5,9 @@ import { fetchPosts } from "./fetch-posts";
 import { getMainPost } from "./get-main-post";
 import { updateMainPost } from "./update-main-post";
 import { getPostBySlug } from "./get-post-by-slug";
+import { updatePost } from "./update-post";
+import { getPostCount } from "./get-post-count";
+import { deletePost } from "./delete-post";
 
 export const postsRouter = express.Router();
 
@@ -12,9 +15,12 @@ postsRouter.get("/", fetchPosts)
 postsRouter.get("/main", getMainPost)
 postsRouter.get("/id/:id", getPostById)
 postsRouter.get("/slug/:slug", getPostBySlug)
+postsRouter.get("/count", getPostCount)
 
+postsRouter.delete("/id/:id", deletePost)
 
 postsRouter.post("/", createPost)
 
 postsRouter.patch("/main/:id", updateMainPost)
+postsRouter.patch("/id/:id", updatePost)
 

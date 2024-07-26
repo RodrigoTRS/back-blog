@@ -1,33 +1,34 @@
 import { Post } from "@prisma/client"
 import { PostsRepository } from "../repositories/posts-repository"
 import { generateSlug } from "../utils/generate-slug"
-import { CategoriesRepository } from "../repositories/categories-repository"
 
-interface CreatePostUseCaseRequest {
+interface UpdatePostUseCaseRequest {
+    id: string,
     title: string,
     content: string,
     categories: string[]
 }
 
-interface CreatePostUseCaseResponse {
+interface UpdatePostUseCaseResponse {
     post: Post
 }
 
-export class CreatePostUseCase {
+export class UpdatePostUseCase {
     constructor(
-        private categoriesRepository: CategoriesRepository,
         private postsRepository: PostsRepository
     ) {}
 
     async execute({
+        id,
         title,
         content,
         categories,
-    }: CreatePostUseCaseRequest): Promise<CreatePostUseCaseResponse> {
+    }: UpdatePostUseCaseRequest): Promise<UpdatePostUseCaseResponse> {
 
         const slug = generateSlug(title)
 
-        const post = await this.postsRepository.create({
+        const post = await this.postsRepository.update({
+            id,
             title,
             slug,
             content,

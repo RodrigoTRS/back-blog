@@ -1,4 +1,4 @@
-import { CreatePostRequest, PostsRepository } from "../posts-repository";
+import { CreatePostRequest, PostsRepository, UpdatePostRequest } from "../posts-repository";
 import { prisma } from "../../lib/prisma";
 import { PostNotFoundError } from "../../errors/post-not-found-error";
 import { PaginationRequestProps } from "../../utils/pagination-props";
@@ -29,6 +29,25 @@ export class PrismaPostsRepository implements PostsRepository {
         }
 
         return newPost
+    }
+
+    async update(post: UpdatePostRequest) {
+        const updatedPost = await prisma.post.update({
+            data: {
+                title: post.title,
+                content: post.content,
+                slug: post.slug,
+                categories: {
+                    set: [],
+                    connect: post.categories.map(category => ({ title: category }))
+                }
+            },
+            where: {
+                id: post.id
+            }
+        })
+
+        return updatedPost
     }
 
     async getPostById(id: string) {
@@ -132,7 +151,16 @@ export class PrismaPostsRepository implements PostsRepository {
             throw new PostNotFoundError()
         }
 
-        return post
+          return post
+    }
 
+    async deletePost(id: string) {
+        const post = await prisma.post.delete({
+            where: {
+                id
+            }
+        })
+
+        return post
     }
 }
