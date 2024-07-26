@@ -31,9 +31,7 @@ export class CreatePostUseCase {
             title,
             slug,
             content,
-            categories: {
-                connect: categories.map(category => ({ title: category }))
-            }
+            categories
         })
 
         return {

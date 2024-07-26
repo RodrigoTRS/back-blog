@@ -1,22 +1,25 @@
-import { Prisma } from "@prisma/client";
-import { PostsRepository } from "../posts-repository";
+import { CreatePostRequest, PostsRepository } from "../posts-repository";
 import { prisma } from "../../lib/prisma";
 import { PostNotFoundError } from "../../errors/post-not-found-error";
 import { PaginationRequestProps } from "../../utils/pagination-props";
 
-export class PrismaPostsRepository implements PostsRepository {
-    async create(post: Prisma.PostUncheckedCreateInput) {
-        const isThereMainPost = await prisma.mainPost.findFirst()
 
+
+export class PrismaPostsRepository implements PostsRepository {
+    async create(post: CreatePostRequest) {
         const newPost = await prisma.post.create({
             data: {
                 title: post.title,
                 slug: post.slug,
                 content: post.content,
-                categories: post.categories
+                categories: {
+                    connect: post.categories.map(category => ({ title: category }))
+                }
             }
         })
-
+        
+        const isThereMainPost = await prisma.mainPost.findFirst()
+        
         if (!isThereMainPost) {
             await prisma.mainPost.create({
                 data: {
