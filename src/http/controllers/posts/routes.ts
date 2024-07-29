@@ -23,4 +23,3 @@ postsRouter.post("/", createPost)
 
 postsRouter.patch("/main/:id", updateMainPost)
 postsRouter.patch("/id/:id", updatePost)
-

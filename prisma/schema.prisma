@@ -10,7 +10,7 @@ datasource db {
 model Category {
   id String @id @default(uuid())
   title String @unique
-  slug String
+  slug String @unique
 
   Post Post[]
 
@@ -20,7 +20,7 @@ model Category {
 model Post {
   id String @id @default(uuid())
   title String @unique
-  slug String 
+  slug String @unique
   categories Category[]
   content String @db.Text
   createdAt DateTime @default(now())
@@ -41,4 +41,12 @@ model MenuOption {
   slug String
 
   @@map("menu_options")
+}
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+
+  @@map("users")
 }
